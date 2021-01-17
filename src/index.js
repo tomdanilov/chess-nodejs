@@ -10,6 +10,7 @@ function createWindow () {
   })
 
   win.setMenu(null)
+  win.webContents.openDevTools()
   win.loadFile('index.html')
 }
 
