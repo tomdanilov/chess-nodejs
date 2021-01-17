@@ -1,0 +1,21 @@
+{
+  "name": "chess-nodejs",
+  "version": "1.0.0",
+  "description": "Our team project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomdanilov/chess-nodejs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomdanilov/chess-nodejs/issues"
+  },
+  "homepage": "https://github.com/tomdanilov/chess-nodejs#readme"
+}
