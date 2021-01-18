@@ -44,6 +44,8 @@ function fill_board()
 }
 
 setInterval(() => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     fill_board();
-}, 1000)
+}, 10)
 // const board = [[]]
