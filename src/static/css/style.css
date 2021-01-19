@@ -13,6 +13,30 @@
     font-size: 20px;
     background-color: #000;
     color: #fff;
-    font-weight: bold;
     text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.error {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 14px;
+    background-color: #efefef;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #000;
+    padding: 6px;
+    z-index: 1;
+    transition: .4s;
+    visibility: hidden;
+}
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

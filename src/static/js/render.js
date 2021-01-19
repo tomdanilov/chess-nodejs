@@ -175,6 +175,33 @@ var mark_square = null; // square that will be marked in red when choosing the d
 var turn = WHITE;
 var turn_element = document.getElementById('turn');
 
+// Error interval
+var error_interval;
+var error_disapper = 0;
+var error_element = document.getElementById('error-msg');
+
+function post_error(err_msg)
+{
+    try {
+        clearInterval(error_interval);
+    } catch (error) { };
+
+    error_element.innerText = err_msg;
+    error_element.style.visibility = 'visible';
+
+    error_disapper = 2;
+    error_interval = setInterval(() => {
+        error_disapper--;
+
+        if (!error_disapper)
+        {
+            error_element.innerText = '';
+            error_element.style.visibility = 'hidden';
+            clearInterval(error_interval);
+        }
+    }, 1000);
+}
+
 function setup_board()
 {
     board = STARTING_BOARD;
@@ -260,7 +287,7 @@ function draw_board()
     }
 
     // Mark the mark requested square
-    if (mark_square)
+    if (mark_square && (!is_same_position(mark_square, src_square)))
     {
         ctx.lineWidth = 4;
         ctx.strokeStyle = RED_COLOR;
@@ -317,7 +344,27 @@ function detect_square_by_click(cursor_x, cursor_y)
 
 function is_same_position(src, dest)
 {
-    return (src.x == dest.x) && (src.y == dest.y);
+    try {
+        return (src.x == dest.x) && (src.y == dest.y);
+    } catch (error) {
+        return false;
+    }
+}
+
+function is_valid_piece(square)
+{
+    // Check if piece is an allay piece or blank piece
+    let piece = board[square.y][square.x];
+
+    if (piece === undefined)
+    {
+        return false;
+    } else if (piece.team !== turn)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 function valid_move(src, dest)
@@ -327,11 +374,43 @@ function valid_move(src, dest)
     if (is_same_position(src, dest))
     {
         // same square chosen, invalid move
+        post_error('You chose same square');
+        return false;
+    }
+
+    if (!is_valid_piece(src))
+    {
+        // check if the piece you try to move is your piece, if not then invalid move
+        let turn_display;
+
+        if (turn)
+        {
+            // White
+            turn_display = 'white';
+        } else {
+            // Black
+            turn_display = 'black';
+        }
+
+        post_error(`You chose to move enemy piece/blank. Current turn is ${turn_display}`);
+        return false;
+    }
+
+    if (is_valid_piece(dest))
+    {
+        // check if the destination piece is your piece, you can't eat your piece, invalid move
+        post_error('You can\'t eat your pieces');
         return false;
     }
 
     try {
-        return piece.is_valid_move(src, dest);
+        if (piece.is_valid_move(src, dest))
+        {
+            return true;
+        } else {
+            post_error('Move is invalid');
+            return false;
+        }
     } catch (error)
     {
         console.log('The peice don\'t have `is_valid_move` method.')
