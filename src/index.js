@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron')
+const DEBUG = true;
 
 function createWindow () {
     const win = new BrowserWindow({
@@ -10,7 +11,12 @@ function createWindow () {
     })
 
     win.setMenu(null)
-    win.webContents.openDevTools()
+    
+    if (DEBUG)
+    {
+        win.webContents.openDevTools()
+    }
+
     win.loadFile('index.html')
 }
 
