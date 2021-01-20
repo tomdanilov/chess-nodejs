@@ -1,5 +1,5 @@
 const { app, BrowserWindow } = require('electron')
-const DEBUG = true;
+const DEBUG = false;
 var win_future_width;
 
 function createWindow () {

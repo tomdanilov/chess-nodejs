@@ -100,6 +100,26 @@ class Knight
     {
         this.team = team;
         this.name = 'knight';
+        this.is_valid_move = (src, dest) => {
+            if ((src.x + 2 == dest.x) && ((src.y + 1 == dest.y) || (src.y - 1 == dest.y)))
+            {
+                return true;
+            }
+            else if ((src.x - 2 == dest.x) && ((src.y + 1 == dest.y) || (src.y - 1 == dest.y)))
+            {
+                return true;
+            }
+            else if ((src.y + 2 == dest.y) && ((src.x + 1 == dest.x) || (src.x - 1 == dest.x)))
+            {
+                return true;
+            }
+            else if ((src.y - 2 == dest.y) && ((src.x + 1 == dest.x) || (src.x - 1 == dest.x)))
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
 
@@ -118,6 +138,14 @@ class King
     {
         this.team = team;
         this.name = 'king';
+        this.is_valid_move = (src, dest) => {
+            if (Math.abs(src.x - dest.x) < 2 && Math.abs(src.y - dest.y) < 2)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
 
@@ -134,8 +162,65 @@ class Pawn
 {
     constructor(team)
     {
+        this.moved = false;
         this.team = team;
         this.name = 'pawn';
+        if (team)
+        {
+            // White UP
+            this.changeval = -1;
+        } else {
+            // Black DOWN
+            this.changeval = 1;
+        }
+
+        this.is_valid_move = (src, dest) => {
+            if (!this.moved)
+            {
+                if ( ((src.y + (2 * this.changeval) == dest.y) || (src.y + this.changeval == dest.y)) && src.x == dest.x )
+                {
+                    if ((src.y + (2 * this.changeval) == dest.y))
+                    {
+                        let piece = board[src.y + this.changeval][src.x];
+
+                        if (piece != undefined)
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (src.y + this.changeval == dest.y)
+                    {
+                        let piece = board[dest.y][dest.x];
+
+                        if (piece != undefined)
+                        {
+                            return false;
+                        }
+                    }
+
+                    this.moved = true;
+                    return true;
+                }
+            } else {
+                if ((src.y + this.changeval == dest.y) && src.x == dest.x)
+                {
+                    // move
+                    return true;
+                }
+
+                if ((src.y + this.changeval == dest.y) && ((src.x + 1 == dest.x) || (src.x - 1 == dest.x)))
+                {
+                    // eat
+                    if (board[dest.y][dest.x] != undefined)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 }
 
@@ -475,4 +560,3 @@ canvas.addEventListener('mousemove', (event) => {
 }, false);
 
 on_start();
-// const board = [[]]
